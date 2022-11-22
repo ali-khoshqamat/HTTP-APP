@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Discussion from "./containers/Discussion";
 
 function App() {
