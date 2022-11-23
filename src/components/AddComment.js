@@ -1,23 +1,13 @@
-import axios from "axios";
 import { useState } from "react";
 
-const AddComment = () => {
+const AddComment = ({ onAddPost }) => {
   const [comment, setComment] = useState({
     name: "",
     email: "",
     body: "",
   });
-  const postCommetHandler = () => {
-    axios
-      .post("https://jsonplaceholder.typicode.com/comments", {
-        ...comment,
-        postId: 10,
-      })
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-  };
+
   const changeHandler = (e) => {
-    // console.log(e.target.name, e.target.value);
     setComment({ ...comment, [e.target.name]: e.target.value });
   };
 
@@ -53,7 +43,7 @@ const AddComment = () => {
         </div>
         <button
           type="submit"
-          onClick={postCommetHandler}
+          onClick={() => onAddPost(comment)}
           className="bg-blue-600 text-blue-50 mt-2.5 py-1.5 px-3.5 rounded-md"
         >
           Add New Comment

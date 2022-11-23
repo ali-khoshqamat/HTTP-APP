@@ -6,19 +6,24 @@ import FullComment from "../components/FullComment";
 
 const Discussion = () => {
   const [comments, setComments] = useState(null);
-  const [fullComment, setFullComment] = useState(null);
   const [commentId, setCommentId] = useState(null);
 
   useEffect(() => {
     axios
-      .get("https://jsonplaceholder.typicode.com/comments")
-      .then(({ data }) => setComments(data.slice(0, 6)))
+      .get("http://localhost:3001/comments")
+      .then(({ data }) => setComments(data))
       .catch((error) => console.log(error));
   }, []);
 
-  const selectCommentHandler = (comment) => {
-    setFullComment(comment);
-    setCommentId(comment.id);
+  const postCommetHandler = (comment) => {
+    axios
+      .post("http://localhost:3001/comments", {
+        ...comment,
+        postId: 10,
+      })
+      .then((res) => axios.get("http://localhost:3001/comments"))
+      .then(({ data }) => setComments(data))
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -30,7 +35,7 @@ const Discussion = () => {
               key={c.id}
               name={c.name}
               email={c.email}
-              onClick={() => selectCommentHandler(c)}
+              onClick={() => setCommentId(c.id)}
             />
           ))
         ) : (
@@ -38,8 +43,8 @@ const Discussion = () => {
         )}
       </section>
       <section className="w-full flex flex-col justify-center items-center xl:flex-row xl:justify-around gap-5">
-        <FullComment fullComment={fullComment} commentId={commentId} />
-        <AddComment />
+        <FullComment commentId={commentId} setComments={setComments} />
+        <AddComment onAddPost={postCommetHandler} />
       </section>
     </main>
   );
