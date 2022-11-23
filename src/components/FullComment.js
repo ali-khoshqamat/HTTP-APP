@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const FullComment = ({ commentId, setComments }) => {
   const [comment, setComment] = useState(null);
@@ -17,9 +18,9 @@ const FullComment = ({ commentId, setComments }) => {
       .delete(`http://localhost:3001/comments/${commentId}`)
       .then((res) => axios.get("http://localhost:3001/comments"))
       .then(({ data }) => setComments(data))
-      // 10 comment => id: 3 => axios.delete() => ok! 9 comment => response.data: 9 comment => setState(comment)
       .catch((error) => console.log(error));
     setComment(null);
+    toast.error("Comment was Deleted!");
   };
 
   let commentDetail = (
