@@ -17,14 +17,13 @@ const Discussion = () => {
   }, []);
 
   const selectCommentHandler = (comment) => {
-    console.log(comment);
     setFullComment(comment);
     setCommentId(comment.id);
   };
 
   return (
-    <main className="w-full h-scree flex flex-col items-center m-5 font-body gap-y-5">
-      <section className="flex flex-wrap justify-start items-center p-2.5 border border-solid border-gray-300 rounded-md">
+    <main className="w-2/3 flex flex-col items-center p-5 font-body gap-y-10">
+      <section className="flex flex-wrap justify-between items-center p-2.5 border border-solid border-gray-300 rounded-md">
         {comments ? (
           comments.map((c) => (
             <Comment
@@ -38,8 +37,10 @@ const Discussion = () => {
           <p>Loading...</p>
         )}
       </section>
-      <FullComment fullComment={fullComment} commentId={commentId} />
-      <AddComment />
+      <section className="w-full flex flex-col justify-center items-center xl:flex-row xl:justify-around gap-5">
+        <FullComment fullComment={fullComment} commentId={commentId} />
+        <AddComment />
+      </section>
     </main>
   );
 };
