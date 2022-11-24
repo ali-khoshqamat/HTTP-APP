@@ -1,9 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import AddComment from "../components/AddComment";
 import Comment from "../components/Comment";
 import FullComment from "../components/FullComment";
 import { toast } from "react-toastify";
+import http from "../services/httpService";
 
 const Discussion = () => {
   const [comments, setComments] = useState(null);
@@ -11,23 +11,36 @@ const Discussion = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/comments")
+    http
+      .get("/comments")
       .then(({ data }) => setComments(data))
       // .catch((error) => setError({message: error.message})); // form Back-End
       .catch((error) => setError(true));
   }, []);
 
-  const postCommetHandler = (comment) => {
-    axios
-      .post("http://localhost:3001/comments", {
+  // const postCommetHandler = (comment) => {
+  //   http
+  //     .post("/comments", {
+  //       ...comment,
+  //       postId: 10,
+  //     })
+  //     .then((res) => http.get("/comments"))
+  //     .then(({ data }) => setComments(data), toast.success("Comment Added :)"))
+  //     .catch((error) => console.log(error));
+  // };
+
+  const postCommetHandler = async (comment) => {
+    try {
+      await http.post("/comments", {
         ...comment,
         postId: 10,
-      })
-      .then((res) => axios.get("http://localhost:3001/comments"))
-      .then(({ data }) => setComments(data))
-      .catch((error) => console.log(error));
-    toast.success("Comment Added :)");
+      });
+      const { data } = await http.get("/comments");
+      setComments(data);
+      toast.success("Comment Added :)");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderComment = () => {
@@ -51,7 +64,11 @@ const Discussion = () => {
         {renderComment()}
       </section>
       <section className="w-full flex flex-col justify-center items-center xl:flex-row xl:justify-around gap-5">
-        <FullComment commentId={commentId} setComments={setComments} />
+        <FullComment
+          commentId={commentId}
+          setComments={setComments}
+          setCommentId={setCommentId}
+        />
         <AddComment onAddPost={postCommetHandler} />
       </section>
     </main>

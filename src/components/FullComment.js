@@ -1,26 +1,29 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import http from "../services/httpService";
 
-const FullComment = ({ commentId, setComments }) => {
+const FullComment = ({ commentId, setComments, setCommentId }) => {
   const [comment, setComment] = useState(null);
 
   useEffect(() => {
     commentId &&
-      axios
-        .get(`http://localhost:3001/comments/${commentId}`)
+      http
+        .get(`/comments/${commentId}`)
         .then(({ data }) => setComment(data))
         .catch((error) => console.log(error));
   }, [commentId]);
 
-  const deleteHandler = () => {
-    axios
-      .delete(`http://localhost:3001/comments/${commentId}`)
-      .then((res) => axios.get("http://localhost:3001/comments"))
-      .then(({ data }) => setComments(data))
-      .catch((error) => console.log(error));
-    setComment(null);
-    toast.error("Comment was Deleted!");
+  const deleteHandler = async () => {
+    try {
+      await http.delete(`/comments/${commentId}`);
+      const { data } = await http.get("/comments");
+      setComments(data);
+      setCommentId(null);
+      setComment(null);
+      toast.error("Comment was Deleted!");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   let commentDetail = (
