@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import http from "../services/httpService";
+import {
+  deleteComment,
+  getAllComments,
+  getComment,
+} from "../services/CRUDCommentService";
 
 const FullComment = ({ commentId, setComments, setCommentId }) => {
   const [comment, setComment] = useState(null);
 
   useEffect(() => {
     commentId &&
-      http
-        .get(`/comments/${commentId}`)
+      getComment(commentId)
         .then(({ data }) => setComment(data))
         .catch((error) => console.log(error));
   }, [commentId]);
 
   const deleteHandler = async () => {
     try {
-      await http.delete(`/comments/${commentId}`);
-      const { data } = await http.get("/comments");
+      await deleteComment(commentId);
+      const { data } = await getAllComments();
       setComments(data);
       setCommentId(null);
       setComment(null);

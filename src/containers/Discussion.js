@@ -3,7 +3,7 @@ import AddComment from "../components/AddComment";
 import Comment from "../components/Comment";
 import FullComment from "../components/FullComment";
 import { toast } from "react-toastify";
-import http from "../services/httpService";
+import { getAllComments, postComment } from "../services/CRUDCommentService";
 
 const Discussion = () => {
   const [comments, setComments] = useState(null);
@@ -11,31 +11,16 @@ const Discussion = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    http
-      .get("/comments")
+    getAllComments()
       .then(({ data }) => setComments(data))
-      // .catch((error) => setError({message: error.message})); // form Back-End
       .catch((error) => setError(true));
+    // .catch((error) => setError({message: error.message})); // form Back-End
   }, []);
 
-  // const postCommetHandler = (comment) => {
-  //   http
-  //     .post("/comments", {
-  //       ...comment,
-  //       postId: 10,
-  //     })
-  //     .then((res) => http.get("/comments"))
-  //     .then(({ data }) => setComments(data), toast.success("Comment Added :)"))
-  //     .catch((error) => console.log(error));
-  // };
-
-  const postCommetHandler = async (comment) => {
+  const postCommentHandler = async (comment) => {
     try {
-      await http.post("/comments", {
-        ...comment,
-        postId: 10,
-      });
-      const { data } = await http.get("/comments");
+      await postComment({ ...comment, postId: 10 });
+      const { data } = await getAllComments();
       setComments(data);
       toast.success("Comment Added :)");
     } catch (error) {
@@ -69,7 +54,7 @@ const Discussion = () => {
           setComments={setComments}
           setCommentId={setCommentId}
         />
-        <AddComment onAddPost={postCommetHandler} />
+        <AddComment onAddPost={postCommentHandler} />
       </section>
     </main>
   );
