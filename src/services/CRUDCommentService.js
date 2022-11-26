@@ -1,5 +1,7 @@
 import http from "./httpService";
+import instance from "../axiosInstance";
 
+// http
 export function getAllComments() {
   return http.get("/comments");
 }
@@ -9,9 +11,22 @@ export function getComment(id) {
 }
 
 export function postComment(bodyRequest) {
-  return http.post("/comments", bodyRequest);
+  const token = "SECURE TOKEN!";
+  const header = {
+    headers: {
+      // Authorization: "SECURE TOKEN",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return http.post("/comments", bodyRequest, header);
 }
 
+export function putComment(id, bodyRequest) {
+  return http.put(`/comments/${id}`, bodyRequest);
+}
+
+// instance
 export function deleteComment(id) {
-  return http.delete(`/comments/${id}`);
+  return instance.delete(`/comments/${id}`);
 }
