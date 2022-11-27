@@ -48,14 +48,14 @@ const Discussion = () => {
       <section className="flex flex-wrap justify-between items-center p-2.5 border border-solid border-gray-300 rounded-md">
         {renderComment()}
       </section>
-      <section className="w-full flex flex-col justify-center items-center xl:flex-row xl:justify-around gap-5">
+      {/* <section className="w-full flex flex-col justify-center items-center xl:flex-row xl:justify-around gap-5">
         <FullComment
           commentId={commentId}
           setComments={setComments}
           setCommentId={setCommentId}
         />
         <AddComment onAddPost={postCommentHandler} />
-      </section>
+      </section> */}
     </main>
   );
 };
