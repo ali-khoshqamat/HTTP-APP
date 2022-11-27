@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import {
-  deleteComment,
-  getAllComments,
-  getComment,
-} from "../services/CRUDCommentService";
+import { deleteComment, getComment } from "../services/CRUDCommentService";
 
-const FullComment = ({ setComments, setCommentId }) => {
+const FullComment = () => {
   const [comment, setComment] = useState(null);
+  const navigate = useNavigate();
   const { id } = useParams();
-  // console.log(id);
   const commentId = id;
 
   useEffect(() => {
@@ -23,11 +19,9 @@ const FullComment = ({ setComments, setCommentId }) => {
   const deleteHandler = async () => {
     try {
       await deleteComment(commentId);
-      const { data } = await getAllComments();
-      setComments(data);
-      setCommentId(null);
       setComment(null);
       toast.error("Comment was Deleted!");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

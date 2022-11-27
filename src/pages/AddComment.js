@@ -1,11 +1,25 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { postComment } from "../services/CRUDCommentService";
 
-const AddComment = ({ onAddPost }) => {
+const AddComment = () => {
+  const navigate = useNavigate();
   const [comment, setComment] = useState({
     name: "",
     email: "",
     body: "",
   });
+
+  const postCommentHandler = async (comment) => {
+    try {
+      await postComment({ ...comment, postId: 10 });
+      navigate("/");
+      toast.success("Comment Added :)");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const changeHandler = (e) => {
     setComment({ ...comment, [e.target.name]: e.target.value });
@@ -43,7 +57,7 @@ const AddComment = ({ onAddPost }) => {
         </div>
         <button
           type="submit"
-          onClick={() => onAddPost(comment)}
+          onClick={() => postCommentHandler(comment)}
           className="bg-blue-600 text-blue-50 mt-2.5 py-1.5 px-3.5 rounded-md"
         >
           Add New Comment
