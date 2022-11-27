@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   deleteComment,
@@ -6,8 +7,11 @@ import {
   getComment,
 } from "../services/CRUDCommentService";
 
-const FullComment = ({ commentId, setComments, setCommentId }) => {
+const FullComment = ({ setComments, setCommentId }) => {
   const [comment, setComment] = useState(null);
+  const { id } = useParams();
+  // console.log(id);
+  const commentId = id;
 
   useEffect(() => {
     commentId &&
